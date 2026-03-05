@@ -1,0 +1,1531 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Ailuminate API",
+    "description": "API documentation for the Ailuminate platform",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:5000",
+      "description": "Development server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "accessToken"
+      }
+    },
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "User ID"
+          },
+          "username": {
+            "type": "string",
+            "description": "Username"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Email address"
+          },
+          "role": {
+            "type": "string",
+            "enum": ["researcher", "admin"],
+            "description": "User role"
+          },
+          "isVerified": {
+            "type": "boolean",
+            "description": "Email verification status"
+          },
+          "banned": {
+            "type": "boolean",
+            "description": "Whether user is banned"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Account creation time"
+          }
+        }
+      },
+      "Quiz": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Quiz ID"
+          },
+          "title": {
+            "type": "string",
+            "description": "Quiz title"
+          },
+          "description": {
+            "type": "string",
+            "description": "Quiz description"
+          },
+          "owner": {
+            "type": "string",
+            "description": "Quiz owner ID"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["draft", "published", "unavailable"],
+            "description": "Quiz status"
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of question IDs"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation timestamp"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last updated timestamp"
+          }
+        }
+      },
+      "Question": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Question ID"
+          },
+          "quiz": {
+            "type": "string",
+            "description": "Associated quiz ID"
+          },
+          "type": {
+            "type": "string", 
+            "enum": ["text", "image", "video", "audio"],
+            "description": "Question type"
+          },
+          "content": {
+            "type": "string",
+            "description": "Question text"
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Multiple choice options"
+          },
+          "correctIndex": {
+            "type": "integer",
+            "description": "Index of correct answer (0-based)"
+          },
+          "explanation": {
+            "type": "string",
+            "description": "Explanation for the correct answer"
+          },
+          "mediaUrls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "URLs for media associated with the question"
+          },
+          "optionMedia": {
+            "type": "object",
+            "description": "Media associated with specific options"
+          },
+          "order": {
+            "type": "integer",
+            "description": "Question display order"
+          }
+        }
+      },
+      "File": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "File ID"
+          },
+          "filename": {
+            "type": "string",
+            "description": "Filename on server"
+          },
+          "originalName": {
+            "type": "string",
+            "description": "Original filename"
+          },
+          "mimetype": {
+            "type": "string",
+            "description": "File MIME type"
+          },
+          "size": {
+            "type": "integer",
+            "description": "File size in bytes"
+          },
+          "path": {
+            "type": "string",
+            "description": "File path on server"
+          },
+          "owner": {
+            "type": "string",
+            "description": "File owner ID"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Upload timestamp"
+          }
+        }
+      },
+      "QuizAttempt": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Attempt ID"
+          },
+          "quiz": {
+            "type": "string",
+            "description": "Quiz ID"
+          },
+          "answers": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "question": { "type": "string" },
+                "selectedOption": { "type": "integer" },
+                "isCorrect": { "type": "boolean" }
+              }
+            },
+            "description": "User's answers"
+          },
+          "score": {
+            "type": "integer",
+            "description": "Score achieved"
+          },
+          "completed": {
+            "type": "boolean",
+            "description": "Whether quiz was completed"
+          },
+          "userEmail": {
+            "type": "string",
+            "description": "Email for results (optional)"
+          },
+          "demographics": {
+            "type": "object",
+            "properties": {
+              "ageGroup": { "type": "string" },
+              "gender": { "type": "string" },
+              "aiExperience": { "type": "string" }
+            },
+            "description": "User demographics"
+          },
+          "ipAddress": {
+            "type": "string",
+            "description": "IP address of participant"
+          },
+          "userAgent": {
+            "type": "string",
+            "description": "User agent string"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Attempt timestamp"
+          }
+        }
+      },
+      "Session": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Session ID"
+          },
+          "quiz": {
+            "type": "string",
+            "description": "Quiz ID"
+          },
+          "startedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Session start time"
+          },
+          "deviceType": {
+            "type": "string",
+            "description": "Type of device used"
+          },
+          "isPublic": {
+            "type": "boolean",
+            "description": "Whether this is a public session"
+          },
+          "completed": {
+            "type": "boolean",
+            "description": "Whether the session was completed"
+          },
+          "currentQuestionIndex": {
+            "type": "integer",
+            "description": "Current question index"
+          },
+          "ipAddress": {
+            "type": "string",
+            "description": "IP address"
+          },
+          "userAgent": {
+            "type": "string",
+            "description": "Browser user agent"
+          },
+          "visitorId": {
+            "type": "string",
+            "description": "Unique visitor ID"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    { "name": "Authentication", "description": "User authentication endpoints" },
+    { "name": "Users", "description": "User management" },
+    { "name": "Quizzes", "description": "Quiz management for researchers" },
+    { "name": "Questions", "description": "Question management for quizzes" },
+    { "name": "Public", "description": "Public-facing endpoints" },
+    { "name": "Analytics", "description": "Statistics and analytics" },
+    { "name": "Files", "description": "File upload and management" }
+  ],
+  "paths": {
+    "/api/auth/register": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Register a new researcher account",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["username", "email", "password"],
+                "properties": {
+                  "username": { "type": "string" },
+                  "email": { "type": "string", "format": "email" },
+                  "password": { "type": "string", "format": "password" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Account created, verification email sent"
+          },
+          "400": {
+            "description": "Invalid input or email already in use"
+          }
+        }
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Login to account",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["username", "password"],
+                "properties": {
+                  "username": { "type": "string" },
+                  "password": { "type": "string", "format": "password" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "username": { "type": "string" },
+                    "role": { "type": "string" },
+                    "_id": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid credentials"
+          },
+          "403": {
+            "description": "Account not verified or banned"
+          }
+        }
+      }
+    },
+    "/api/auth/refresh": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Refresh access token",
+        "description": "Uses HttpOnly refresh token cookie to generate new access token",
+        "responses": {
+          "200": {
+            "description": "New access token generated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "username": { "type": "string" },
+                    "role": { "type": "string" },
+                    "_id": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "No refresh token provided"
+          },
+          "403": {
+            "description": "Invalid refresh token"
+          }
+        }
+      }
+    },
+    "/api/auth/logout": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Logout user",
+        "description": "Clear authentication cookies",
+        "responses": {
+          "200": {
+            "description": "Logged out successfully"
+          }
+        }
+      }
+    },
+    "/api/auth/verify/{token}": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "Verify email",
+        "description": "Verify user email with token",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email verified successfully"
+          },
+          "400": {
+            "description": "Invalid token or email already verified"
+          }
+        }
+      }
+    },
+    "/api/auth/forgot-password": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Forgot password",
+        "description": "Send password reset email",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["email"],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset email sent"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    },
+    "/api/auth/reset-password/{token}": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Reset password",
+        "description": "Reset password with token",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["password"],
+                "properties": {
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "minLength": 6
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password reset successfully"
+          },
+          "400": {
+            "description": "Invalid or expired token"
+          }
+        }
+      }
+    },
+    "/api/auth/support": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Send support email",
+        "description": "Send a support request email",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["name", "email", "subject", "message"],
+                "properties": {
+                  "name": { "type": "string" },
+                  "email": { "type": "string", "format": "email" },
+                  "subject": { "type": "string" },
+                  "message": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Support message sent successfully"
+          },
+          "400": {
+            "description": "Missing required fields"
+          }
+        }
+      }
+    },
+    "/api/auth/profile": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "Get user profile",
+        "description": "Get the profile of the currently authenticated user",
+        "security": [{"cookieAuth": []}],
+        "responses": {
+          "200": {
+            "description": "User profile data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/public/quizzes": {
+      "get": {
+        "tags": ["Public"],
+        "summary": "Get published quizzes",
+        "description": "Retrieve all published quizzes, sorted by popularity",
+        "responses": {
+          "200": {
+            "description": "List of published quizzes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Quiz"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/quizzes/{id}": {
+      "get": {
+        "tags": ["Public"],
+        "summary": "Get published quiz by ID",
+        "description": "Retrieve a specific published quiz with its questions",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Quiz object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Quiz"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Quiz not found or not published"
+          }
+        }
+      }
+    },
+    "/api/public/quizzes/{id}/start": {
+      "post": {
+        "tags": ["Public"],
+        "summary": "Start quiz session",
+        "description": "Start a new quiz session and get first question ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "deviceType": { "type": "string" },
+                  "visitorId": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Quiz session started",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "sessionId": { "type": "string" },
+                    "firstQuestionId": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Quiz not found or not published"
+          }
+        }
+      }
+    },
+    "/api/public/quizzes/{id}/submit": {
+      "post": {
+        "tags": ["Public"],
+        "summary": "Submit quiz answers",
+        "description": "Submit answers to a quiz and get score",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["answers"],
+                "properties": {
+                  "answers": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "questionId": { "type": "string" },
+                        "selectedOption": { "type": "number" }
+                      }
+                    }
+                  },
+                  "visitorId": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Quiz submission successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "score": { "type": "number" },
+                    "totalQuestions": { "type": "number" },
+                    "attemptId": { "type": "string" },
+                    "visitorId": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Quiz not found or not published"
+          }
+        }
+      }
+    },
+    "/api/public/demographics": {
+      "post": {
+        "tags": ["Public"],
+        "summary": "Submit demographics",
+        "description": "Submit demographics after completing a quiz",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["attemptId"],
+                "properties": {
+                  "attemptId": { "type": "string" },
+                  "visitorId": { "type": "string" },
+                  "email": { "type": "string", "format": "email" },
+                  "ageGroup": { "type": "string" },
+                  "gender": { "type": "string" },
+                  "aiExperience": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Demographics saved successfully"
+          },
+          "404": {
+            "description": "Quiz attempt not found"
+          }
+        }
+      }
+    },
+    "/api/public/quizzes/attempts/{id}": {
+      "get": {
+        "tags": ["Public"],
+        "summary": "Get quiz attempt",
+        "description": "Get details of a quiz attempt by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Quiz attempt details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/QuizAttempt"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Attempt not found"
+          }
+        }
+      }
+    },
+    "/api/public/email-results": {
+      "post": {
+        "tags": ["Public"],
+        "summary": "Send quiz results via email",
+        "description": "Email quiz results to the participant",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["attemptId"],
+                "properties": {
+                  "attemptId": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Results sent to email"
+          },
+          "400": {
+            "description": "Quiz attempt not found or email not provided"
+          }
+        }
+      }
+    },
+    "/api/public/accounts": {
+      "get": {
+        "tags": ["Public"],
+        "summary": "Get researcher accounts",
+        "description": "Get list of researcher accounts",
+        "responses": {
+          "200": {
+            "description": "List of researcher accounts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/public/account/{id}": {
+      "get": {
+        "tags": ["Public"],
+        "summary": "Get account by ID",
+        "description": "Get user account details by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Account details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Account not found"
+          }
+        }
+      }
+    },
+    "/api/users/request-researcher": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Request researcher role",
+        "description": "Request to become a researcher or delete account",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["username", "email", "password", "action"],
+                "properties": {
+                  "username": { "type": "string" },
+                  "email": { "type": "string", "format": "email" },
+                  "password": { "type": "string" },
+                  "action": { 
+                    "type": "string", 
+                    "enum": ["researcher", "delete"] 
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Request submitted successfully"
+          },
+          "400": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/api/users/verify-researcher-request/{token}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Verify researcher request",
+        "description": "Verify email for researcher role request",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Email verified successfully"
+          },
+          "400": {
+            "description": "Invalid or expired token"
+          }
+        }
+      }
+    },
+    "/api/users/researcher-requests": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Get researcher requests",
+        "description": "Admin only: Get list of pending researcher role requests",
+        "security": [{"cookieAuth": []}],
+        "responses": {
+          "200": {
+            "description": "List of researcher requests"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - User is not an admin"
+          }
+        }
+      }
+    },
+    "/api/users/approve-researcher/{id}": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Approve researcher request",
+        "description": "Admin only: Approve a researcher role request",
+        "security": [{"cookieAuth": []}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Researcher request approved"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - User is not an admin"
+          }
+        }
+      }
+    },
+    "/api/users/ban/{id}": {
+      "patch": {
+        "tags": ["Users"],
+        "summary": "Ban or unban user",
+        "description": "Admin only: Set ban status for a user",
+        "security": [{"cookieAuth": []}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["banned"],
+                "properties": {
+                  "banned": { "type": "boolean" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ban status updated successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - User is not an admin"
+          }
+        }
+      }
+    },
+    "/api/users/search": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Search users",
+        "description": "Admin only: Search for users by username or email",
+        "security": [{"cookieAuth": []}],
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - User is not an admin"
+          }
+        }
+      }
+    },
+    "/api/quizzes": {
+      "get": {
+        "tags": ["Quizzes"],
+        "summary": "Get researcher's quizzes",
+        "description": "Get all quizzes created by the authenticated researcher",
+        "security": [{"cookieAuth": []}],
+        "responses": {
+          "200": {
+            "description": "List of researcher's quizzes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Quiz"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - User is not a researcher"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Quizzes"],
+        "summary": "Create a new quiz",
+        "description": "Create a new quiz (restricted to researchers)",
+        "security": [{"cookieAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["title"],
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Quiz created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Quiz"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - User is not a researcher"
+          }
+        }
+      }
+    },
+    "/api/quizzes/{id}": {
+      "get": {
+        "tags": ["Quizzes"],
+        "summary": "Get quiz by ID",
+        "description": "Get a specific quiz by ID (only if owned by the researcher)",
+        "security": [{"cookieAuth": []}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Quiz object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Quiz"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Quizzes"],
+        "summary": "Update quiz",
+        "description": "Update a quiz (only if owned by the researcher)",
+        "security": [{"cookieAuth": []}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": { "type": "string" },
+                  "description": { "type": "string" },
+                  "status": { 
+                    "type": "string",
+                    "enum": ["draft", "published", "unavailable"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Quiz updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Quiz"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Quizzes"],
+        "summary": "Delete quiz",
+        "description": "Delete a quiz (only if owned by the researcher)",
+        "security": [{"cookieAuth": []}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Quiz deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied"
+          }
+        }
+      }
+    },
+    "/api/questions": {
+      "post": {
+        "tags": ["Questions"],
+        "summary": "Add question to quiz",
+        "description": "Add a new question to a quiz",
+        "security": [{"cookieAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["quizId", "content", "options", "correctIndex"],
+                "properties": {
+                  "quizId": { "type": "string" },
+                  "type": { 
+                    "type": "string",
+                    "enum": ["text", "image", "video", "audio"],
+                    "default": "text"
+                  },
+                  "content": { "type": "string" },
+                  "options": { 
+                    "type": "array",
+                    "items": { "type": "string" }
+                  },
+                  "correctIndex": { "type": "number" },
+                  "explanation": { "type": "string" },
+                  "order": { "type": "number" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Question created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Question"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Questions"],
+        "summary": "Get questions by quiz ID",
+        "description": "Get all questions for a specific quiz",
+        "security": [{"cookieAuth": []}],
+        "parameters": [
+          {
+            "name": "quizId",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of questions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Question"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Quiz ID not provided"
+          }
+        }
+      }
+    },
+    "/api/questions/{id}": {
+      "put": {
+        "tags": ["Questions"],
+        "summary": "Update question",
+        "description": "Update a question (only if quiz is owned by researcher)",
+        "security": [{"cookieAuth": []}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "content": { "type": "string" },
+                  "options": { 
+                    "type": "array",
+                    "items": { "type": "string" }
+                  },
+                  "correctIndex": { "type": "number" },
+                  "explanation": { "type": "string" },
+                  "order": { "type": "number" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Question updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Question"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Questions"],
+        "summary": "Delete question",
+        "description": "Delete a question (only if quiz is owned by researcher)",
+        "security": [{"cookieAuth": []}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Question deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Access denied"
+          }
+        }
+      }
+    },
+    "/api/files": {
+      "get": {
+        "tags": ["Files"],
+        "summary": "Get user's files",
+        "description": "Get all files owned by the authenticated researcher",
+        "security": [{"cookieAuth": []}],
+        "responses": {
+          "200": {
+            "description": "List of user's files",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/File"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - User is not a researcher"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Files"],
+        "summary": "Upload a file",
+        "description": "Upload a file (restricted to researchers)",
+        "security": [{"cookieAuth": []}],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "File uploaded successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/File"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "No file uploaded or invalid file type"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - User is not a researcher"
+          }
+        }
+      }
+    },
+    "/api/files/{id}": {
+      "delete": {
+        "tags": ["Files"],
+        "summary": "Delete file",
+        "description": "Delete a file (only if owned by the researcher)",
+        "security": [{"cookieAuth": []}],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "File deleted successfully"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Access denied"
+          },
+          "404": {
+            "description": "File not found"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,191 @@
+.profileContainer {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 20px;
+    max-height: 100vh;
+}
+
+.loadingContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+}
+
+.errorContainer {
+    text-align: center;
+    color: #e74c3c;
+    padding: 2rem;
+    background-color: #fdf0ef;
+    border-radius: 8px;
+    margin: 2rem auto;
+    max-width: 600px;
+}
+
+.profileCard {
+    background-color: var(--card-bg, #ffffff);
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.profileHeader {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.avatarPlaceholder {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background-color: var(--link-color, #4a90e2);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-right: 1.5rem;
+}
+
+.profileHeader h1 {
+    margin: 0;
+    color: var(--text-color, #333);
+    font-size: 1.8rem;
+}
+
+.profileInfo {
+    background-color: var(--bg-color, #f8f9fa);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.infoItem {
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+}
+
+.infoLabel {
+    font-weight: 600;
+    width: 100px;
+    color: var(--text-color, #555);
+}
+
+.infoValue {
+    color: var(--text-color, #333);
+}
+
+.actionButtons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 2rem;
+}
+
+.actionButtons button {
+    padding: 10px 15px;
+    background-color: var(--card-bg, #f0f0f0);
+    border: 1px solid var(--border-color, #ddd);
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.actionButtons button:hover {
+    background-color: var(--hover-bg, #e6e6e6);
+}
+
+.deleteButton {
+    background-color: #fdf0ef !important;
+    color: #e74c3c !important;
+    border-color: #fad7d3 !important;
+}
+
+.deleteButton:hover {
+    background-color: #fad7d3 !important;
+}
+
+.quizSection h2 {
+    color: var(--text-color, #333);
+    border-bottom: 1px solid var(--border-color, #ddd);
+    padding-bottom: 0.8rem;
+    margin-bottom: 1rem;
+}
+
+.quizList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.quizItem {
+    background-color: var(--bg-color, #f8f9fa);
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+}
+
+.quizItem h3 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    color: var(--text-color, #333);
+}
+
+.quizItem p {
+    color: var(--text-secondary, #666);
+    margin-bottom: 0.5rem;
+}
+
+.quizMeta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: var(--text-secondary, #777);
+}
+
+.quizStatus {
+    background-color: var(--card-bg, #e6e6e6);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.noQuizzes {
+    color: var(--text-secondary, #777);
+    text-align: center;
+    padding: 2rem 0;
+}
+
+@media (max-width: 600px) {
+    .profileHeader {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .avatarPlaceholder {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .infoItem {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .infoLabel {
+        width: 100%;
+        margin-bottom: 0.2rem;
+    }
+    
+    .actionButtons {
+        flex-direction: column;
+    }
+    
+    .actionButtons button {
+        width: 100%;
+    }
+}

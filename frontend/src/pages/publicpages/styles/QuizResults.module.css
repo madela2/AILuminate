@@ -1,0 +1,158 @@
+.resultsContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  padding-top: 50px;
+  max-height: 500vh;
+}
+
+.scoreCard {
+  text-align: center;
+  padding: 30px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.scoreCircle {
+  display: inline-block;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 5px solid #4CAF50;
+  line-height: 110px;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.scoreNumber {
+  font-size: 48px;
+  font-weight: bold;
+  color: #333;
+}
+
+.scoreTotal {
+  font-size: 24px;
+  color: #666;
+}
+
+.scorePercentage {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.averageComparison {
+  color: #666;
+}
+
+.feedback {
+  margin-top: 30px;
+}
+
+.feedbackItem {
+  margin-bottom: 30px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 20px;
+}
+
+.questionTitle {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.correct {
+  color: #4CAF50;
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+.incorrect {
+  color: #f44336;
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+.explanation {
+  color: #555;
+  line-height: 1.6;
+}
+
+.actions {
+  margin-top: 40px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.emailButton, .homeButton {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.emailButton {
+  background-color: #2196F3;
+  color: white;
+}
+
+.homeButton {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.emailButton:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.loading {
+  text-align: center;
+  margin-top: 100px;
+  font-size: 18px;
+  color: #666;
+}
+
+.errorContainer {
+  text-align: center;
+  margin-top: 100px;
+}
+
+.countdownTimer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  text-align: center;
+}
+
+.countdownTimer p {
+    margin: 0 0 5px;
+    font-size: 20px;
+    color: #666;
+}
+
+.countdownTimer span {
+    font-weight: bold;
+    color: #2196f3;
+}
+
+.progressBar {
+    width: 100%;
+    height: 8px;
+    background-color: #e0e0e0;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background-color: #2196f3;
+    transition: width 1s linear;
+}

@@ -1,0 +1,33 @@
+.navbar{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;  
+    box-shadow: 0 2px 4px black;
+}
+
+.logo{
+    cursor: pointer;
+    width: 80px;
+    height: 70px;
+    border-radius: 50%;
+}
+
+.greeting{
+    font-size: 1.2rem;
+}
+
+.navBtn{
+    color: var(--text-color);
+    background-color: var(--bg-color);
+    margin: 0 40px;
+    padding: 10px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    border-radius: 5px;
+}
+.navBtn:hover{
+    border-radius: 5px;
+    background-color: var(--card-bg);
+}

@@ -1,0 +1,68 @@
+.demographicsContainer {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  max-height: 100vh;
+}
+
+.form {
+  margin-top: 20px;
+}
+
+.formGroup {
+  margin-bottom: 20px;
+}
+
+.formGroup label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+}
+
+.formGroup input,
+.formGroup select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.submitButton {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.submitButton:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #f44336;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #ffebee;
+  border-radius: 4px;
+}
+
+.errorContainer {
+  text-align: center;
+  margin-top: 100px;
+}
+
+.errorContainer button {
+  background-color: #2196F3;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 20px;
+}

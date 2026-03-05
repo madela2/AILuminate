@@ -1,0 +1,25 @@
+footer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    box-shadow: 0 2px 4px black;
+    padding: 30px 10px;
+}
+
+a{
+    color: var(--link-color);
+}
+
+.footer-logo{
+    width: 100px;
+    margin: 0;
+}
+
+h3{
+    margin: 0;
+    padding: 1rem
+}
+.footer-link{
+    color: var(--link-color);
+}
