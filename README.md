@@ -65,4 +65,7 @@ For a future version we would like to implement:
 - Edit username button on the profile page
 - Edit email button on the profile page
 - Fully implement the delete button on researcher profile 
- 
+
+ ## Contributors
+ - Emilie Rolstad Sulen
+ - Madeleine Lyseggen Aas
